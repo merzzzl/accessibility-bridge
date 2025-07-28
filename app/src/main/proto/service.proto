@@ -1,0 +1,16 @@
+syntax = "proto3";
+package service.accessibility.bridge;
+
+option java_multiple_files = true;
+
+import "google/protobuf/empty.proto";
+import "action_manager.proto";
+
+service ActionManager {
+  rpc ScreenDump(google.protobuf.Empty) returns (ScreenView);
+  rpc PerformSwipe(ActionSwipe) returns (google.protobuf.Empty);
+  rpc PerformMultiTouch(ActionMultiTouch) returns (google.protobuf.Empty);
+  rpc PerformClick(ActionClick) returns (google.protobuf.Empty);
+  rpc TypeText(ActionTypeText) returns (google.protobuf.Empty);
+  rpc PerformAction(ActionKey) returns (google.protobuf.Empty);
+}

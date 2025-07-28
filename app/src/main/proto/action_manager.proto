@@ -1,0 +1,96 @@
+syntax = "proto3";
+package service.accessibility.bridge;
+
+message ScreenView {
+  message Bounds {
+    int32 left = 1;
+    int32 top = 2;
+    int32 right = 3;
+    int32 bottom = 4;
+  }
+
+  int32 id = 1;
+  string class_name = 2;
+  string text = 3;
+  Bounds bounds = 4;
+  repeated ScreenView children = 5;
+  string unique_id = 6;
+}
+
+message ElementSelector {
+  string unique_id = 1;
+  repeated int32 path = 2;
+  string regex = 4;
+}
+
+message Point {
+  int32 x = 1;
+  int32 y = 2;
+}
+
+message Finger {
+  int32 finger_id = 1;
+
+  oneof start {
+    Point start_point = 100;
+    ElementSelector start_element = 101;
+  }
+
+  oneof end {
+    Point end_point = 110;
+    ElementSelector end_element = 111;
+  }
+
+  int32 duration = 6;
+  bool keep_down = 7;
+}
+
+message ActionSwipe {
+  Finger finger = 1;
+}
+
+message ActionMultiTouch {
+  repeated Finger finger = 1;
+}
+
+message ActionClick {
+  oneof click {
+    Point click_point = 100;
+    ElementSelector click_element = 101;
+  }
+
+  int32 duration = 3;
+}
+
+message ActionTypeText {
+  ElementSelector selector = 1;
+  string text = 2;
+}
+
+message ActionKey {
+  enum Key {
+    UNKNOWN = 0;
+    GLOBAL_ACTION_BACK = 1;
+    GLOBAL_ACTION_HOME = 2;
+    GLOBAL_ACTION_RECENTS = 3;
+    GLOBAL_ACTION_NOTIFICATIONS = 4;
+    GLOBAL_ACTION_QUICK_SETTINGS = 5;
+    GLOBAL_ACTION_POWER_DIALOG = 6;
+    GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN = 7;
+    GLOBAL_ACTION_LOCK_SCREEN = 8;
+    GLOBAL_ACTION_TAKE_SCREENSHOT = 9;
+    GLOBAL_ACTION_KEYCODE_HEADSETHOOK = 10;
+    GLOBAL_ACTION_ACCESSIBILITY_BUTTON = 11;
+    GLOBAL_ACTION_ACCESSIBILITY_BUTTON_CHOOSER = 12;
+    GLOBAL_ACTION_ACCESSIBILITY_SHORTCUT = 13;
+    GLOBAL_ACTION_ACCESSIBILITY_ALL_APPS = 14;
+    GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE = 15;
+    GLOBAL_ACTION_DPAD_UP = 16;
+    GLOBAL_ACTION_DPAD_DOWN = 17;
+    GLOBAL_ACTION_DPAD_LEFT = 18;
+    GLOBAL_ACTION_DPAD_RIGHT = 19;
+    GLOBAL_ACTION_DPAD_CENTER = 20;
+  }
+
+  Key key = 1;
+}

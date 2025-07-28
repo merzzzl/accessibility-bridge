@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Accessibility Bridge</string>
+    <string name="grpc_server">Process gRPC listener</string>
+</resources>
