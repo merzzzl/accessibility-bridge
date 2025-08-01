@@ -156,19 +156,14 @@ class ActionManager(private val accessibilityService: IAccessibilityService) : A
     ): Pair<Int, Int> {
         return when {
             isStart && finger.hasStartPoint() -> finger.startPoint.x to finger.startPoint.y
-            !isStart && finger.hasEndPoint() -> finger.endPoint.x to finger.endPoint.y
+
+            !isStart && finger.hasStartPoint() ->
+                (finger.startPoint.x + finger.width) to (finger.startPoint.y + finger.height)
 
             isStart && finger.hasStartElement() -> {
                 val view = requireScreen(responseObserver)
                 val node = findViewBySelector(finger.startElement, view)
                     ?: respondError(responseObserver, Status.NOT_FOUND, "Start view not found")
-                node.bounds.centerX() to node.bounds.centerY()
-            }
-
-            !isStart && finger.hasEndElement() -> {
-                val view = requireScreen(responseObserver)
-                val node = findViewBySelector(finger.endElement, view)
-                    ?: respondError(responseObserver, Status.NOT_FOUND, "End view not found")
                 node.bounds.centerX() to node.bounds.centerY()
             }
 

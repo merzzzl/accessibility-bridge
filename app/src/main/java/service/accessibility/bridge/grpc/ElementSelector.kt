@@ -10,10 +10,6 @@ fun findViewBySelector(selector: ActionManager.ElementSelector, root: ViewNode):
         findViewByUniqueId(selector.uniqueId, root)?.let { results.add(it) } ?: return null
     }
 
-    if (selector.pathCount > 0) {
-        findViewByPath(selector.pathList, root)?.let { results.add(it) } ?: return null
-    }
-
     if (selector.regex.isNotEmpty()) {
         findViewByRegex(selector.regex, root)?.let { results.add(it) } ?: return null
     }
@@ -41,24 +37,6 @@ fun findViewByUniqueId(uniqueId: String, root: ViewNode): ViewNode? {
     }
 
     return null
-}
-
-fun findViewByPath(path: List<Int>, root: ViewNode): ViewNode? {
-    if (path.isEmpty() || path[0] != root.resourceID) {
-        return null
-    }
-
-    var current = root
-
-    for (i in 1 until path.size) {
-        val child = current.children.find { it.resourceID == path[i] }
-        if (child == null) {
-            return null
-        }
-        current = child
-    }
-
-    return current
 }
 
 fun findViewByRegex(regex: String, root: ViewNode): ViewNode? {

@@ -19,7 +19,6 @@ message ScreenView {
 
 message ElementSelector {
   string unique_id = 1;
-  repeated int32 path = 2;
   string regex = 4;
 }
 
@@ -36,11 +35,8 @@ message Finger {
     ElementSelector start_element = 101;
   }
 
-  oneof end {
-    Point end_point = 110;
-    ElementSelector end_element = 111;
-  }
-
+  uint32 width = 2;
+  uint32 height = 3;
   int32 duration = 6;
   bool keep_down = 7;
 }
