@@ -258,7 +258,11 @@ class AccessibilityServiceProvider : AccessibilityService() {
             finger.keepDown
         )
 
-        activeStrokes[finger.id] = stroke
+        if (finger.keepDown) {
+            activeStrokes[finger.id] = stroke
+        } else {
+            activeStrokes.remove(finger.id)
+        }
 
         gestureBuilder.addStroke(
             stroke
