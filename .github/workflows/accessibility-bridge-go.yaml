@@ -10,6 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Clone accessibility-bridge-go
+        run: |
+          git clone https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/merzzzl/accessibility-bridge-go.git
+          cd accessibility-bridge-go
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -21,17 +28,16 @@ jobs:
           sudo apt-get install -y protobuf-compiler
           go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
           go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-          export PATH="$PATH:$(go env GOPATH)/bin"
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
-      - name: Run make proto
-        run: make proto
-
-      - name: Push tag to accessibility-bridge-go
+      - name: Run make
         run: |
-          git clone https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/merzzzl/accessibility-bridge-go.git
           cd accessibility-bridge-go
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          make proto
+
+      - name: Commit
+        run: |
+          cd accessibility-bridge-go
           if ! git diff --quiet; then
             git add .
             git commit -m "Update proto from tag ${GITHUB_REF_NAME}"
