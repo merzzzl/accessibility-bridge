@@ -42,10 +42,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+
       - uses: ncipollo/release-action@v1
         with:
           name: Release ${{ github.ref_name }}
@@ -54,3 +56,12 @@ jobs:
           body: "Automated release for tag ${{ github.ref_name }}."
           allowUpdates: true
           replaceArtifacts: true
+
+      - name: Push tag to accessibility-bridge-go
+        run: |
+          git clone https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/merzzzl/accessibility-bridge-go.git
+          cd accessibility-bridge-go
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "${GITHUB_REF_NAME}" || true
+          git push origin "${GITHUB_REF_NAME}"
