@@ -56,12 +56,3 @@ jobs:
           body: "Automated release for tag ${{ github.ref_name }}."
           allowUpdates: true
           replaceArtifacts: true
-
-      - name: Push tag to accessibility-bridge-go
-        run: |
-          git clone https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/merzzzl/accessibility-bridge-go.git
-          cd accessibility-bridge-go
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "${GITHUB_REF_NAME}" || true
-          git push origin "${GITHUB_REF_NAME}"
